@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author LinusFackler
+ *
+ */
+module Terminal {
+}
