@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author LinusFackler
- *
- */
-module Terminal {
-}
