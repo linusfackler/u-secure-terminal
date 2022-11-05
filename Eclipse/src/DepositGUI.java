@@ -111,7 +111,7 @@ public class DepositGUI extends JFrame {
         getContentPane().setBackground(new Color(50, 71, 80));
         
         // LOGO
-        ImageIcon imageIcon = new ImageIcon("C:\\\\Users\\\\Inne\\\\Downloads\\\\banklogo.png"); 
+        ImageIcon imageIcon = new ImageIcon("src/banklogo.png"); 
         Image image = imageIcon.getImage(); 
         Image newimg = image.getScaledInstance(139, 32,  java.awt.Image.SCALE_SMOOTH);
         imageIcon = new ImageIcon(newimg);
