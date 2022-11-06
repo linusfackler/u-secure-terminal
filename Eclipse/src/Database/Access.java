@@ -41,7 +41,7 @@ public class Access
 		return ok;
 	}
 	
-	public User searchUser(String uID) {   
+	public User searchUser(int uID) {   
 		ResultSet rsM;                                                  
 		currentUser = new User();
 		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";                    

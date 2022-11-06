@@ -12,6 +12,7 @@ import backend.User;
 import database.Access;
 
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -93,6 +94,11 @@ public class DepositGUI extends JFrame {
         
         // BACK BUTTON
         JButton btnBack = new JButton("BACK");
+        btnBack.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		back();
+        	}
+        });
         btnBack.setBackground(new Color(0, 128, 64));
         btnBack.setFont(new Font("Dubai Medium", Font.BOLD, 18));
         btnBack.setForeground(new Color(255, 255, 255));
@@ -111,7 +117,7 @@ public class DepositGUI extends JFrame {
         txtAmount.setBounds(217,242,300,50);
         getContentPane().add(txtAmount);
         
-        t2.setBounds(0,42,736,50);
+        t2.setBounds(0,53,736,50);
         getContentPane().add(t2);
         
         btnDeposit.setBounds(217,303,125,50);
@@ -125,16 +131,12 @@ public class DepositGUI extends JFrame {
         
         getContentPane().setBackground(new Color(50, 71, 80));
         
-        // LOGO
-        ImageIcon imageIcon = new ImageIcon("banklogo.png"); 
-        Image image = imageIcon.getImage(); 
-        Image newimg = image.getScaledInstance(139, 32,  java.awt.Image.SCALE_SMOOTH);
-        imageIcon = new ImageIcon(newimg);
-        
-        JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon(newimg));
-        lblNewLabel.setBounds(10, 0, 147, 50);
-        getContentPane().add(lblNewLabel);
+        // LOGO        
+		JLabel logoPic = new JLabel("");
+		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
+		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setBounds(0, 0, 248, 58);
+		getContentPane().add(logoPic);
         
         JButton btnHelp = new JButton("Help");
         btnHelp.addActionListener(new ActionListener() {
@@ -167,5 +169,11 @@ public class DepositGUI extends JFrame {
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+	}
+
+	// this method closes the current window and opens the menu screen
+	protected void back() {
+		this.setVisible(false);
+		new MenuScreenUI().setVisible(true);
 	}
 }

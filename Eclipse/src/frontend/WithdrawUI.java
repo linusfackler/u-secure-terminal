@@ -3,6 +3,7 @@ package frontend;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -65,7 +67,7 @@ public class WithdrawUI extends JFrame {
 		txtWithdrawFunds.setEditable(false);
 		txtWithdrawFunds.setBorder(new LineBorder(new Color(0, 0, 0)));
 		txtWithdrawFunds.setBackground(new Color(0, 85, 43));
-		txtWithdrawFunds.setBounds(0, 44, 736, 50);
+		txtWithdrawFunds.setBounds(0, 61, 736, 50);
 		contentPane.add(txtWithdrawFunds);
 		
 		JLabel l1 = new JLabel("ENTER AMOUNT YOU WANT");
@@ -98,6 +100,11 @@ public class WithdrawUI extends JFrame {
 		contentPane.add(btnWithdraw);
 		
 		JButton btnBack = new JButton("BACK");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				back();
+			}
+		});
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setFont(new Font("Dubai Medium", Font.BOLD, 18));
 		btnBack.setBackground(new Color(0, 128, 64));
@@ -119,9 +126,22 @@ public class WithdrawUI extends JFrame {
 		textField_1.setBackground(new Color(0, 85, 43));
 		textField_1.setBounds(0, 448, 736, 50);
 		contentPane.add(textField_1);
+		
+        // LOGO
+		JLabel logoPic = new JLabel("");
+		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
+		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setBounds(0, 0, 248, 58);
+		contentPane.add(logoPic);
 
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+	}
+
+	// this method closes the current window and opens the menu screen
+	protected void back() {
+		this.setVisible(false);
+		new MenuScreenUI().setVisible(true);
 	}
 }

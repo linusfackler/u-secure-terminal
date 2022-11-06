@@ -54,8 +54,8 @@ public class MenuScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon("banklogo.png"));
-		logoPic.setBounds(10, 11, 346, 80);
+		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
 		JLabel serviceText = new JLabel("CHOOSE SERVICE");
@@ -74,6 +74,7 @@ public class MenuScreenUI extends JFrame {
 		JButton btnDeposit = new JButton("DEPOSIT");
 		btnDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				openDeposit();		// when button pressed, Deposit screen opened
 			}
 		});
 		btnDeposit.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
@@ -86,6 +87,7 @@ public class MenuScreenUI extends JFrame {
 		JButton btnWithdraw = new JButton("WITHDRAWAL");
 		btnWithdraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				openWithdraw();		// when button pressed, Withdraw screen opened
 			}
 		});
 		btnWithdraw.setBackground(Color.WHITE);
@@ -96,6 +98,11 @@ public class MenuScreenUI extends JFrame {
 		panel.add(btnWithdraw);
 		
 		JButton btnTransfer = new JButton("TRANSFER");
+		btnTransfer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openTransfer();
+			}
+		});
 		btnTransfer.setBackground(Color.WHITE);
 		btnTransfer.setOpaque(true);
 		btnTransfer.setForeground(Color.BLACK);
@@ -104,6 +111,11 @@ public class MenuScreenUI extends JFrame {
 		panel.add(btnTransfer);
 		
 		JButton btnRecent = new JButton("TRANSACTIONS");
+		btnRecent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openTransactions();
+			}
+		});
 		btnRecent.setBackground(Color.WHITE);
 		btnRecent.setOpaque(true);
 		btnRecent.setForeground(Color.BLACK);
@@ -114,6 +126,24 @@ public class MenuScreenUI extends JFrame {
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+	}
+
+	protected void openTransactions() {
+		// to be added soon
+	}
+
+	protected void openTransfer() {
+		// to be added soon
+	}
+
+	protected void openWithdraw() {
+		this.setVisible(false);
+		new WithdrawUI().setVisible(true);
+	}
+
+	protected void openDeposit() {
+		this.setVisible(false);
+		new DepositGUI().setVisible(true);
 	}
 
 }

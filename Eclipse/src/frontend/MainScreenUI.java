@@ -67,8 +67,8 @@ public class MainScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT)));
-		logoPic.setBounds(10, 11, 346, 80);
+		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
 		JLabel scanText = new JLabel("PLEASE SCAN FINGERPRINT");
@@ -91,6 +91,7 @@ public class MainScreenUI extends JFrame {
 		btnMenu.setForeground(Color.BLACK);
 		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				openMenu();
 			}
 		});
 		panel.setLayout(null);
@@ -134,18 +135,23 @@ public class MainScreenUI extends JFrame {
 		
 		JLabel fingerPrintPic = new JLabel("");
 		fingerPrintPic.setHorizontalAlignment(SwingConstants.CENTER);
-		fingerPrintPic.setIcon(new ImageIcon(new ImageIcon("src/fingerprint.png").getImage().getScaledInstance(63, 73, Image.SCALE_DEFAULT)));
-		fingerPrintPic.setBounds(793, 558, 63, 73);
+		fingerPrintPic.setIcon(new ImageIcon(new ImageIcon("fingerprint.png").getImage().getScaledInstance(63, 73, Image.SCALE_DEFAULT)));
+		fingerPrintPic.setBounds(652, 293, 63, 73);
 		contentPane.add(fingerPrintPic);
 		
 		JLabel fingerPrintPic_1 = new JLabel("");
-		fingerPrintPic_1.setIcon(new ImageIcon(new ImageIcon("src/down arrow.png").getImage().getScaledInstance(104, 112, Image.SCALE_DEFAULT)));
+		fingerPrintPic_1.setIcon(new ImageIcon(new ImageIcon("arrow.png").getImage().getScaledInstance(104, 112, Image.SCALE_DEFAULT)));
 		fingerPrintPic_1.setHorizontalAlignment(SwingConstants.CENTER);
-		fingerPrintPic_1.setBounds(849, 541, 104, 112);
+		fingerPrintPic_1.setBounds(632, 376, 104, 112);
 		contentPane.add(fingerPrintPic_1);
 		
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+	}
+
+	protected void openMenu() {
+		this.setVisible(false);
+		new SelectUserUI().setVisible(true);
 	}
 }
