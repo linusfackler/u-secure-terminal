@@ -1,3 +1,4 @@
+package frontend;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,6 +15,8 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtName;
 	private JTextField txtAmount;
+	
+	private User currentUser;
 
 	/**
 	 * Launch the application.

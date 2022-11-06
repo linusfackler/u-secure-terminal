@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ public class Connector
 	Connection conn = null;    
 	Statement stmtSQL = null;  
 
-	public void oeffneDB() {
+	public void openDB() {
 		try
 		{
 			System.out.println("* Load Driver");
@@ -41,7 +41,7 @@ public class Connector
 		}
 	}
 
-	public boolean aendereDB(String pSQL)
+	public boolean changeDB(String pSQL)
 	{ 
 		try {
 			stmtSQL.executeUpdate(pSQL); 
@@ -54,7 +54,7 @@ public class Connector
 		}		
 	}
 
-	public ResultSet leseDB(String pSQL) 
+	public ResultSet readDB(String pSQL) 
 	{
 		ResultSet rs;                  
 		try
@@ -71,7 +71,7 @@ public class Connector
 		}
 	}
 	
-	public void schliesseDB(){            
+	public void closeDB(){            
 		try
 		{
 			conn.close();
