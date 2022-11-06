@@ -31,6 +31,9 @@ public class DepositGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextField txtAmount;
+	
+	private Access ax = new Access();
 	
 	/**
 	 * Launch the application.
@@ -73,18 +76,27 @@ public class DepositGUI extends JFrame {
         l2.setFont(new Font("Dubai Medium", Font.BOLD, 35));
         
         // TEXT INPUT
-        JTextField txtAmount = new JTextField();
+		txtAmount = new JTextField();
+		txtAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAmount.setFont(new Font("Raleway", Font.BOLD, 22));
+		txtAmount.setBounds(217, 250, 300, 33);
+		getContentPane().add(txtAmount);
+		txtAmount.setColumns(10);
         
-        txtAmount.setText("$ ");
-        txtAmount.setFont(new Font("Raleway", Font.BOLD, 22));
-        //
-        
+        JLabel lblBalance = new JLabel("$ 222");
+        lblBalance.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblBalance.setForeground(Color.WHITE);
+        lblBalance.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblBalance.setBounds(537, 18, 189, 25);
+        getContentPane().add(lblBalance);
         
         // DEPOSIT BUTTON
         JButton btnDeposit = new JButton("DEPOSIT");
         btnDeposit.setBackground(new Color(0, 128, 64));
         btnDeposit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		deposit();
+        		lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
         	}
         });
         btnDeposit.setFont(new Font("Dubai Medium", Font.BOLD, 18));
@@ -113,9 +125,6 @@ public class DepositGUI extends JFrame {
         
         l2.setBounds(262,171,213,60);
         getContentPane().add(l2);
-        
-        txtAmount.setBounds(217,242,300,50);
-        getContentPane().add(txtAmount);
         
         t2.setBounds(0,53,736,50);
         getContentPane().add(t2);
@@ -161,14 +170,57 @@ public class DepositGUI extends JFrame {
         t3.setBounds(0, 446, 736, 50);
         getContentPane().add(t3);
         
-
-        //
+        JLabel lblUserID = new JLabel("356254");
+        lblUserID.setHorizontalAlignment(SwingConstants.LEFT);
+        lblUserID.setForeground(Color.WHITE);
+        lblUserID.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblUserID.setBounds(280, 18, 189, 25);
+        getContentPane().add(lblUserID);
+        
+        JLabel lblName = new JLabel("Name");
+        lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblName.setForeground(Color.WHITE);
+        lblName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblName.setBounds(378, 18, 200, 25);
+        getContentPane().add(lblName);
         
 
         
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+        
+		JLabel lblNewLabel = new JLabel("$");
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 22));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBounds(193, 253, 27, 27);
+		getContentPane().add(lblNewLabel);
+		
+		lblUserID.setText("Acc Nr: " + Integer.toString(SelectUserUI.currentUser.getUserID()));
+		lblName.setText(SelectUserUI.currentUser.getName());
+		lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
+	}
+
+	protected void deposit() {
+		double currentBalance = SelectUserUI.currentUser.getBalance();
+		try {
+			currentBalance += Double.parseDouble(txtAmount.getText());
+			
+			SelectUserUI.currentUser.setBalance(currentBalance);
+			
+			boolean ok = ax.updateBalance(SelectUserUI.currentUser, currentBalance);
+			
+			if (ok == true) {
+				JOptionPane.showMessageDialog(null, "Amount successfully desposited.");
+				return;
+			}
+			else {
+				JOptionPane.showMessageDialog(this, "Could not deposit amount.");
+			}
+		}		
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Please enter only numbers");			
+		}		
 	}
 
 	// this method closes the current window and opens the menu screen

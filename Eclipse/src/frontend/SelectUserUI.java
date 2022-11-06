@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -35,6 +36,7 @@ public class SelectUserUI extends JFrame {
 	private JTextField txtBalance;
 	
 	private Access ax = new Access();
+	public static User currentUser;
 
 	/**
 	 * Launch the application.
@@ -105,7 +107,7 @@ public class SelectUserUI extends JFrame {
 		JButton btnCreate = new JButton("CREATE");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				back();
+				create();
 			}
 		});
 		btnCreate.setForeground(Color.WHITE);
@@ -115,6 +117,10 @@ public class SelectUserUI extends JFrame {
 		contentPane.add(btnCreate);
 		
 		JButton btnHelp = new JButton("Help");
+		btnHelp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnHelp.setForeground(Color.WHITE);
 		btnHelp.setFont(new Font("Dubai Medium", Font.BOLD, 18));
 		btnHelp.setBackground(new Color(0, 128, 64));
@@ -178,21 +184,51 @@ public class SelectUserUI extends JFrame {
 
 	protected void select() {
 		int userid = Integer.parseInt(txtUserID.getText());
-		User selectedUser = new User();
+		currentUser = new User();
 		
 		try {
-			selectedUser = ax.searchUser(userid);
+			currentUser = ax.searchUser(userid);
+			
+			if (currentUser == null) {
+				JOptionPane.showMessageDialog(null, "Cannot find user.");
+				return;
+			}
+				
 			this.setVisible(false);
 			new MenuScreenUI().setVisible(true);
 		}
 		
 		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Cannot find user.");			
+			JOptionPane.showMessageDialog(null, "Error selecting user.");			
 		}
 	}
 
 	// this method closes the current window and opens the menu screen
-	protected void back() {
-
+	protected void create() {
+		currentUser = new User();
+		
+		try {
+			int randomNum = ThreadLocalRandom.current().nextInt(300000, 400000);
+			currentUser.setUserID(randomNum);
+			currentUser.setName(txtName.getText());
+			currentUser.setBalance(Double.parseDouble(txtBalance.getText()));
+			currentUser.setFingerPrint("10111010");
+			
+			boolean ok = ax.createUser(currentUser);
+			
+			if (ok == true) {
+				JOptionPane.showMessageDialog(this, "User created");
+				this.setVisible(false);
+				new MenuScreenUI().setVisible(true);
+			}
+			else {
+				currentUser = null;
+				JOptionPane.showMessageDialog(this, "Can't create user");
+			}
+		}
+		
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Please enter correct type of data.");			
+		}
 	}
 }

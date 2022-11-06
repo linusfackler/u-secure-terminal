@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import backend.User;
 
@@ -20,15 +21,33 @@ public class Access
 	Connector conn = new Connector();    
 	
 	public boolean createUser(User u) {    
-		try {
+		try {		
 			mSQL = "INSERT INTO user(UserID, UserName, UserBalance, UserFingerprint) ";
-			mSQL += "VALUES ((SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = \"terminal\" and TABLE_NAME = \"user\"),'";
-			mSQL += u.getName()+ "','";
-			mSQL += u.getBalance() + "',";
+			mSQL += "VALUES (" + u.getUserID() + ", '";
+			mSQL += u.getName()+ "',";
+			mSQL += u.getBalance() + ",";
 			mSQL += u.getFingerPrint() + ");";
 			// create MySQL command to insert user into DB
 
-			System.out.println("Printout so far: " + mSQL);
+			conn.openDB();
+			ok = conn.changeDB(mSQL);
+			// send command to DB
+		} 
+		catch (Exception e) {
+			System.out.println(e);
+			ok = false;		
+		}
+		conn.closeDB(); 
+		return ok;
+	}
+	
+	public boolean updateBalance(User u, double newBalance) {    
+		try {		
+			mSQL = "UPDATE user SET UserBalance = ";
+			mSQL += newBalance + " WHERE UserID = ";
+			mSQL += u.getUserID();
+			// create MySQL command to update balance of the user in DB
+
 			conn.openDB();
 			ok = conn.changeDB(mSQL);
 			// send command to DB
@@ -56,6 +75,7 @@ public class Access
 			currentUser.setFingerPrint(rsM.getNString("UserFingerprint"));
 		}
 		catch(SQLException err) {
+			System.out.println("User not found");
 			currentUser = null;
 		}	
 		conn.closeDB();                                       

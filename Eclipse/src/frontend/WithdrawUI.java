@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -17,15 +18,22 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
+
+import backend.User;
+import database.Access;
+
 import javax.swing.JButton;
 
 public class WithdrawUI extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField txtWithdrawFunds;
-	private JTextField txtAmount;
 	private JTextField textField_1;
+	private JTextField txtAmount;
+	
+	private Access ax = new Access();
 
 	/**
 	 * Launch the application.
@@ -82,19 +90,36 @@ public class WithdrawUI extends JFrame {
 		lblToWithdraw.setBounds(243, 179, 259, 60);
 		contentPane.add(lblToWithdraw);
 		
-		txtAmount = new JTextField();
-		txtAmount.setText("$ ");
-		txtAmount.setFont(new Font("Dialog", Font.BOLD, 22));
-		txtAmount.setBounds(227, 249, 300, 50);
-		contentPane.add(txtAmount);
+		JLabel lblUserID = new JLabel("Acc Nr: 0");
+		lblUserID.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUserID.setForeground(Color.WHITE);
+		lblUserID.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblUserID.setBounds(280, 25, 189, 25);
+		contentPane.add(lblUserID);
+		
+		JLabel lblName = new JLabel((String) null);
+		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblName.setForeground(Color.WHITE);
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblName.setBounds(378, 25, 200, 25);
+		contentPane.add(lblName);
+		
+		JLabel lblBalance = new JLabel("$ 0.0");
+		lblBalance.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBalance.setForeground(Color.WHITE);
+		lblBalance.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblBalance.setBounds(537, 25, 189, 25);
+		contentPane.add(lblBalance);
 		
 		JButton btnWithdraw = new JButton("WITHDRAW");
 		btnWithdraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				withdraw();
+				lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
 			}
 		});
 		btnWithdraw.setForeground(Color.WHITE);
-		btnWithdraw.setFont(new Font("Dubai Medium", Font.BOLD, 17));
+		btnWithdraw.setFont(new Font("Dubai Medium", Font.BOLD, 16));
 		btnWithdraw.setBackground(new Color(0, 128, 64));
 		btnWithdraw.setBounds(227, 310, 125, 50);
 		contentPane.add(btnWithdraw);
@@ -133,10 +158,55 @@ public class WithdrawUI extends JFrame {
 		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
+		
 
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+        
+		lblUserID.setText("Acc Nr: " + Integer.toString(SelectUserUI.currentUser.getUserID()));
+		lblName.setText(SelectUserUI.currentUser.getName());
+		lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
+		
+		txtAmount = new JTextField();
+		txtAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		txtAmount.setFont(new Font("Dialog", Font.BOLD, 22));
+		txtAmount.setColumns(10);
+		txtAmount.setBounds(226, 261, 300, 33);
+		contentPane.add(txtAmount);
+		
+		JLabel lblNewLabel = new JLabel("$");
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 22));
+		lblNewLabel.setBounds(202, 264, 27, 27);
+		contentPane.add(lblNewLabel);
+	}
+
+	protected void withdraw() {
+		double currentBalance = SelectUserUI.currentUser.getBalance();
+		try {
+			currentBalance -= Double.parseDouble(txtAmount.getText());
+			
+			if (currentBalance < 0) {
+				JOptionPane.showMessageDialog(null, "Cannot withdraw as balance would fall below 0.");
+				return;
+			}		
+			SelectUserUI.currentUser.setBalance(currentBalance);
+			
+			boolean ok = ax.updateBalance(SelectUserUI.currentUser, currentBalance);
+			
+			if (ok == true) {
+				JOptionPane.showMessageDialog(null, "Amount successfully withdrawn.");
+				return;
+			}
+			else {
+				JOptionPane.showMessageDialog(this, "Could not withdraw amount.");
+			}
+		}		
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Please enter only numbers");			
+		}
+		
 	}
 
 	// this method closes the current window and opens the menu screen

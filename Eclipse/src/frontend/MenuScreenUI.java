@@ -14,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import backend.User;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -41,7 +44,7 @@ public class MenuScreenUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MenuScreenUI() {
+	public MenuScreenUI() {		
 		setBackground(new Color(55, 71, 79));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1023, 701);
@@ -123,9 +126,36 @@ public class MenuScreenUI extends JFrame {
 		btnRecent.setBounds(385, 164, 272, 110);
 		panel.add(btnRecent);
 		
+		JLabel lblName = new JLabel("Firstname Lastname");
+		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblName.setForeground(new Color(255, 255, 255));
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblName.setBounds(519, 42, 200, 25);
+		contentPane.add(lblName);
+		
+		JLabel lblUserID = new JLabel("AccountID");
+		lblUserID.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUserID.setForeground(Color.WHITE);
+		lblUserID.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblUserID.setBounds(525, 10, 189, 25);
+		contentPane.add(lblUserID);
+		
+		JLabel lblBalance = new JLabel("Balance");
+		lblBalance.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblBalance.setForeground(Color.WHITE);
+		lblBalance.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblBalance.setBounds(525, 73, 189, 25);
+		contentPane.add(lblBalance);
+		
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
+        
+		User curr = new User();
+		curr = SelectUserUI.currentUser;
+		lblUserID.setText("Acc Nr: " + Integer.toString(curr.getUserID()));
+		lblName.setText(curr.getName());
+		lblBalance.setText("$ " + Double.toString(curr.getBalance()));
 	}
 
 	protected void openTransactions() {
