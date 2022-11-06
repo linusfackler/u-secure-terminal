@@ -17,9 +17,9 @@ public class Connector
 		try
 		{
 			System.out.println("* Load Driver");
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			System.out.println(Class.forName("com.mysql.jdbc.Driver"));
-			System.out.println(Class.forName("com.mysql.jdbc.Driver").newInstance());
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			System.out.println(Class.forName("com.mysql.cj.jdbc.Driver"));
+			System.out.println(Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
 		} 
 		catch (Exception e)
 		{
@@ -29,7 +29,7 @@ public class Connector
 
 		try
 		{
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db_fahrzeug","root","");  
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/terminal","root","");  
 			stmtSQL = conn.createStatement();  
 			System.out.println("Connected successfully");
 		}

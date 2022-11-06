@@ -1,3 +1,7 @@
+package frontend;
+
+import java.awt.EventQueue;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -11,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MenuScreenUI extends JFrame {
 
@@ -48,7 +54,7 @@ public class MenuScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("src/banklogo.png").getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon("banklogo.png"));
 		logoPic.setBounds(10, 11, 346, 80);
 		contentPane.add(logoPic);
 		
@@ -56,29 +62,37 @@ public class MenuScreenUI extends JFrame {
 		serviceText.setForeground(new Color(255, 255, 255));
 		serviceText.setHorizontalAlignment(SwingConstants.CENTER);
 		serviceText.setFont(new Font("Dubai Medium", Font.PLAIN, 62));
-		serviceText.setBounds(20, 102, 979, 112);
+		serviceText.setBounds(20, 102, 706, 112);
 		contentPane.add(serviceText);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(55, 71, 79));
-		panel.setBounds(30, 204, 946, 430);
+		panel.setBounds(30, 204, 684, 284);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JButton btnDeposit = new JButton("DEPOSIT");
+		btnDeposit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnDeposit.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
 		btnDeposit.setBackground(Color.WHITE);
 		btnDeposit.setOpaque(true);
 		btnDeposit.setForeground(Color.BLACK);
-		btnDeposit.setBounds(29, 28, 377, 154);
+		btnDeposit.setBounds(29, 28, 269, 110);
 		panel.add(btnDeposit);
 		
-		JButton btnWithdraw = new JButton("CASH WITHDRAWAL");
+		JButton btnWithdraw = new JButton("WITHDRAWAL");
+		btnWithdraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnWithdraw.setBackground(Color.WHITE);
 		btnWithdraw.setOpaque(true);
 		btnWithdraw.setForeground(Color.BLACK);
 		btnWithdraw.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
-		btnWithdraw.setBounds(539, 28, 377, 154);
+		btnWithdraw.setBounds(385, 27, 272, 113);
 		panel.add(btnWithdraw);
 		
 		JButton btnTransfer = new JButton("TRANSFER");
@@ -86,16 +100,20 @@ public class MenuScreenUI extends JFrame {
 		btnTransfer.setOpaque(true);
 		btnTransfer.setForeground(Color.BLACK);
 		btnTransfer.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
-		btnTransfer.setBounds(29, 239, 377, 154);
+		btnTransfer.setBounds(29, 164, 269, 110);
 		panel.add(btnTransfer);
 		
-		JButton btnRecent = new JButton("RECENT TRANSACTIONS");
+		JButton btnRecent = new JButton("TRANSACTIONS");
 		btnRecent.setBackground(Color.WHITE);
 		btnRecent.setOpaque(true);
 		btnRecent.setForeground(Color.BLACK);
 		btnRecent.setFont(new Font("Dubai Medium", Font.PLAIN, 30));
-		btnRecent.setBounds(539, 239, 377, 154);
+		btnRecent.setBounds(385, 164, 272, 110);
 		panel.add(btnRecent);
+		
+        setSize(750,535);
+        setLocation(400,100);
+        setVisible(true);
 	}
 
 }

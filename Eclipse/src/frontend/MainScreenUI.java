@@ -1,3 +1,5 @@
+package frontend;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -65,7 +67,7 @@ public class MainScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("src/banklogo.png").getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(10, 11, 346, 80);
 		contentPane.add(logoPic);
 		
@@ -81,18 +83,18 @@ public class MainScreenUI extends JFrame {
 		panel.setBounds(267, 225, 459, 383);
 		contentPane.add(panel);
 		
-		JButton mainMenuButton = new JButton("Main Menu");
-		mainMenuButton.setBounds(137, 46, 192, 67);
-		mainMenuButton.setFont(new Font("Dubai Medium", Font.PLAIN, 28));
-		mainMenuButton.setBackground(Color.WHITE);
-		mainMenuButton.setOpaque(true);
-		mainMenuButton.setForeground(Color.BLACK);
-		mainMenuButton.addActionListener(new ActionListener() {
+		JButton btnMenu = new JButton("Main Menu");
+		btnMenu.setBounds(137, 46, 192, 67);
+		btnMenu.setFont(new Font("Dubai Medium", Font.PLAIN, 28));
+		btnMenu.setBackground(Color.WHITE);
+		btnMenu.setOpaque(true);
+		btnMenu.setForeground(Color.BLACK);
+		btnMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		panel.setLayout(null);
-		panel.add(mainMenuButton);
+		panel.add(btnMenu);
 		
 		JButton btnEnglish = new JButton("English");
 		btnEnglish.addActionListener(new ActionListener() {
@@ -141,5 +143,9 @@ public class MainScreenUI extends JFrame {
 		fingerPrintPic_1.setHorizontalAlignment(SwingConstants.CENTER);
 		fingerPrintPic_1.setBounds(849, 541, 104, 112);
 		contentPane.add(fingerPrintPic_1);
+		
+        setSize(750,535);
+        setLocation(400,100);
+        setVisible(true);
 	}
 }

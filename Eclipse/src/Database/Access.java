@@ -22,13 +22,14 @@ public class Access
 	public boolean createUser(User u) {    
 		try {
 			mSQL = "INSERT INTO user(UserID, UserName, UserBalance, UserFingerprint) ";
-			mSQL += "VALUES (" + u.getUserID() + ",'";
+			mSQL += "VALUES ((SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = \"terminal\" and TABLE_NAME = \"user\"),'";
 			mSQL += u.getName()+ "','";
 			mSQL += u.getBalance() + "',";
-			mSQL += u.getFingerPrint() + "',";
+			mSQL += u.getFingerPrint() + ");";
 			// create MySQL command to insert user into DB
 
-			conn.openDB();                             
+			System.out.println("Printout so far: " + mSQL);
+			conn.openDB();
 			ok = conn.changeDB(mSQL);
 			// send command to DB
 		} 
@@ -43,7 +44,7 @@ public class Access
 	public User searchUser(String uID) {   
 		ResultSet rsM;                                                  
 		currentUser = new User();
-		mSQL = "SELECT * FROM user WHERE userID = '"+ uID +"';";                    
+		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";                    
 		conn.openDB();
 		rsM = conn.readDB(mSQL);
 			
