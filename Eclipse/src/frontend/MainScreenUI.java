@@ -74,13 +74,13 @@ public class MainScreenUI extends JFrame {
 		JLabel scanText = new JLabel("PLEASE SCAN FINGERPRINT");
 		scanText.setForeground(new Color(255, 255, 255));
 		scanText.setHorizontalAlignment(SwingConstants.CENTER);
-		scanText.setFont(new Font("Dubai Medium", Font.PLAIN, 62));
-		scanText.setBounds(20, 102, 979, 112);
+		scanText.setFont(new Font("Dubai Medium", Font.PLAIN, 50));
+		scanText.setBounds(-16, 49, 770, 87);
 		contentPane.add(scanText);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(55, 71, 79));
-		panel.setBounds(267, 225, 459, 383);
+		panel.setBounds(137, 133, 459, 383);
 		contentPane.add(panel);
 		
 		JButton btnMenu = new JButton("Main Menu");

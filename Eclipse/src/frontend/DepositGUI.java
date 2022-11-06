@@ -105,13 +105,13 @@ public class DepositGUI extends JFrame {
         l1.setBounds(130,113,465,60);
         getContentPane().add(l1);
         
-        l2.setBounds(262,171,198,60);
+        l2.setBounds(262,171,213,60);
         getContentPane().add(l2);
         
         txtAmount.setBounds(217,242,300,50);
         getContentPane().add(txtAmount);
         
-        t2.setBounds(-11,41,755,50);
+        t2.setBounds(0,42,736,50);
         getContentPane().add(t2);
         
         btnDeposit.setBounds(217,303,125,50);
@@ -156,7 +156,7 @@ public class DepositGUI extends JFrame {
         t3.setFont(new Font("Dubai Medium", Font.BOLD, 22));
         t3.setEditable(false);        
         
-        t3.setBounds(-11, 446, 755, 50);
+        t3.setBounds(0, 446, 736, 50);
         getContentPane().add(t3);
         
 
