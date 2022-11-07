@@ -1,3 +1,12 @@
+// This is the Withdraw UI screen, in which the user can
+// withdraw money from his account, by inputting a double variable
+// It will automatically update his DB entry.
+// If there are errors, the user will see a pop-up message.
+// This includes also if the balance drops below 0.
+
+
+
+
 package frontend;
 
 import java.awt.Color;
@@ -186,14 +195,18 @@ public class WithdrawUI extends JFrame {
 		double currentBalance = SelectUserUI.currentUser.getBalance();
 		try {
 			currentBalance -= Double.parseDouble(txtAmount.getText());
+			// create new balance
 			
 			if (currentBalance < 0) {
 				JOptionPane.showMessageDialog(null, "Cannot withdraw as balance would fall below 0.");
 				return;
+				// if balance would fall below 0, return with error
 			}		
 			SelectUserUI.currentUser.setBalance(currentBalance);
+			// set private variable with new balance
 			
 			boolean ok = ax.updateBalance(SelectUserUI.currentUser, currentBalance);
+			// update balance in DB
 			
 			if (ok == true) {
 				JOptionPane.showMessageDialog(null, "Amount successfully withdrawn.");

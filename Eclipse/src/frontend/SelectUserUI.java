@@ -1,3 +1,12 @@
+// This is a temporary screen, in which the user can select
+// an account by inputting an account number
+// or create a new account.
+// After the account is selected or created, the user will advance to the main menu
+// If there are any Database errors, the user will receive a pop-up message.
+// These errors include wrong input (characters instead of doubles), or the account ID
+// exists already.
+
+
 package frontend;
 
 import java.awt.Color;
@@ -209,26 +218,31 @@ public class SelectUserUI extends JFrame {
 		
 		try {
 			int randomNum = ThreadLocalRandom.current().nextInt(300000, 400000);
+			// create UserID with random int from 300000 to 400000
 			currentUser.setUserID(randomNum);
 			currentUser.setName(txtName.getText());
 			currentUser.setBalance(Double.parseDouble(txtBalance.getText()));
 			currentUser.setFingerPrint("10111010");
+			// set user's private variables
 			
 			boolean ok = ax.createUser(currentUser);
+			// create user in DB
 			
 			if (ok == true) {
 				JOptionPane.showMessageDialog(this, "User created");
 				this.setVisible(false);
 				new MenuScreenUI().setVisible(true);
+				// if DB created user, switch to MenuScreenUI
 			}
 			else {
-				currentUser = null;
+				currentUser = null;		// if DB couldn't create user, make it null object
 				JOptionPane.showMessageDialog(this, "Can't create user");
 			}
 		}
 		
 		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Please enter correct type of data.");			
+			JOptionPane.showMessageDialog(null, "Please enter correct type of data.");
+			// if input data was incorrect
 		}
 	}
 }

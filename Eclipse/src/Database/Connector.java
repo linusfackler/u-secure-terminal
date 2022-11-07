@@ -20,11 +20,13 @@ public class Connector
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			System.out.println(Class.forName("com.mysql.cj.jdbc.Driver"));
 			System.out.println(Class.forName("com.mysql.cj.jdbc.Driver").newInstance());
+			// load Java MySQL Driver
 		} 
 		catch (Exception e)
 		{
 			System.err.println("Unable to load driver.");
 			e.printStackTrace();
+			// if driver couldn't load
 		}
 
 		try
@@ -32,6 +34,8 @@ public class Connector
 			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/terminal","root","");  
 			stmtSQL = conn.createStatement();  
 			System.out.println("Connected successfully");
+			// create DB connection using the Driver we previously loaded
+			// currently only running on localhost, soon AWS
 		}
 		catch (SQLException ex)
 		{
@@ -41,6 +45,7 @@ public class Connector
 		}
 	}
 
+	// this method simply changes DB entry and does not rely on return values and returns a boolean
 	public boolean changeDB(String pSQL)
 	{ 
 		try {
@@ -54,6 +59,7 @@ public class Connector
 		}		
 	}
 
+	// this method sends a command to DB and saves the return in a ResultSet
 	public ResultSet readDB(String pSQL) 
 	{
 		ResultSet rs;                  
@@ -71,6 +77,7 @@ public class Connector
 		}
 	}
 	
+	// this method closes the DB connection
 	public void closeDB(){            
 		try
 		{

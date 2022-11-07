@@ -1,3 +1,14 @@
+// This is the Main Screen that starts the program.
+// The user scans his fingerprint and enters the main menu
+// The user is also able to change the language
+// The language change and the finger print scan is not implemented yet,
+// as we need to figure out a way to do so.
+// Currently, by clicking the main menu button, the user enters a temporary screen,
+// in which he can select an account or create a new one.
+// This is just for demonstration purposes
+
+
+
 package frontend;
 
 import java.awt.EventQueue;
@@ -153,5 +164,6 @@ public class MainScreenUI extends JFrame {
 	protected void openMenu() {
 		this.setVisible(false);
 		new SelectUserUI().setVisible(true);
+		// switch to SelectUserUI window
 	}
 }

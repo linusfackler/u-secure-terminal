@@ -1,3 +1,10 @@
+// This is the Deposit UI screen, in which the user can
+// deposit money to his account, by inputting a double variable
+// It will automatically update his DB entry.
+// If there are errors, the user will see a pop-up message.
+
+
+
 package frontend;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -205,10 +212,13 @@ public class DepositGUI extends JFrame {
 		double currentBalance = SelectUserUI.currentUser.getBalance();
 		try {
 			currentBalance += Double.parseDouble(txtAmount.getText());
+			// create new balance
 			
 			SelectUserUI.currentUser.setBalance(currentBalance);
+			// set private variable with new balance
 			
 			boolean ok = ax.updateBalance(SelectUserUI.currentUser, currentBalance);
+			// update balance in DB
 			
 			if (ok == true) {
 				JOptionPane.showMessageDialog(null, "Amount successfully desposited.");

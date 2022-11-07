@@ -29,15 +29,15 @@ public class Access
 			mSQL += u.getFingerPrint() + ");";
 			// create MySQL command to insert user into DB
 
-			conn.openDB();
-			ok = conn.changeDB(mSQL);
-			// send command to DB
+			conn.openDB();				// open DB connection
+			ok = conn.changeDB(mSQL);	// send command to DB
 		} 
 		catch (Exception e) {
 			System.out.println(e);
-			ok = false;		
+			ok = false;
+			// if error, return false
 		}
-		conn.closeDB(); 
+		conn.closeDB();		// close database connection
 		return ok;
 	}
 	
@@ -48,24 +48,25 @@ public class Access
 			mSQL += u.getUserID();
 			// create MySQL command to update balance of the user in DB
 
-			conn.openDB();
-			ok = conn.changeDB(mSQL);
-			// send command to DB
+			conn.openDB();				// open DB connection
+			ok = conn.changeDB(mSQL);	// send command to DB
 		} 
 		catch (Exception e) {
 			System.out.println(e);
-			ok = false;		
+			ok = false;
+			// if error, return false
 		}
-		conn.closeDB(); 
+		conn.closeDB();		// close database connection
 		return ok;
 	}
 	
 	public User searchUser(int uID) {   
 		ResultSet rsM;                                                  
 		currentUser = new User();
-		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";                    
-		conn.openDB();
-		rsM = conn.readDB(mSQL);
+		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";       
+		// create MySQL command to insert user into DB
+		conn.openDB();				// open DB connection
+		rsM = conn.readDB(mSQL);	// read DB and return results
 			
 		try {
 			rsM.next();
@@ -73,13 +74,15 @@ public class Access
 			currentUser.setName(rsM.getString("UserName"));
 			currentUser.setBalance(rsM.getDouble("UserBalance"));
 			currentUser.setFingerPrint(rsM.getNString("UserFingerprint"));
+			// set users data to what was returned from DB
 		}
 		catch(SQLException err) {
 			System.out.println("User not found");
 			currentUser = null;
+			// if error, user not found
 		}	
-		conn.closeDB();                                       
-		return currentUser;                                           
+		conn.closeDB();        // close DB connection                               
+		return currentUser;		// return found user               
 	}
 	
 	public ArrayList<User>userlist_db() {
@@ -110,15 +113,16 @@ public class Access
 	public boolean deleteUserDB() {
 		try {
 			mSQL="DELETE FROM user WHERE UserID = '" + currentUser.getUserID() + "';";
-			conn.openDB();
-			conn.changeDB(mSQL);
+			// create MySQL command to insert user into DB
+			conn.openDB();			// open DB connection
+			conn.changeDB(mSQL);	// send command to DB
 			
 			ok = true;
 		} 
 		catch (Exception e) {
 			ok = false;
 		}
-		conn.closeDB();
+		conn.closeDB();				// close DB connection
 		return ok;
 	}
 	

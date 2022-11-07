@@ -1,3 +1,10 @@
+// This is the menu screen which lets the user choose 4 options, including
+// Deposit, Withdraw, Transfer, and Transactions
+// So far, only Deposit and Withdraw are implemented
+// In the top right, the users information will show
+
+
+
 package frontend;
 
 import java.awt.EventQueue;
@@ -169,11 +176,13 @@ public class MenuScreenUI extends JFrame {
 	protected void openWithdraw() {
 		this.setVisible(false);
 		new WithdrawUI().setVisible(true);
+		// switch to Withdraw UI
 	}
 
 	protected void openDeposit() {
 		this.setVisible(false);
 		new DepositGUI().setVisible(true);
+		// switch to Deposit UI
 	}
 
 }
