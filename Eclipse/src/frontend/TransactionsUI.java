@@ -1,8 +1,4 @@
-// This is the Withdraw UI screen, in which the user can
-// withdraw money from his account, by inputting a double variable
-// It will automatically update his DB entry.
-// If there are errors, the user will see a pop-up message.
-// This includes also if the balance drops below 0.
+// This is the Transaction UI screen. Here, the user can see all his previous transactions.
 
 
 
@@ -31,19 +27,27 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
+import backend.Transaction;
 import backend.User;
 import database.Access;
 
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
 
-public class WithdrawUI extends JFrame {
+public class TransactionsUI extends JFrame {
 	
 	private JPanel contentPane;
 	private JTextField txtWithdrawFunds;
 	private JTextField textField_1;
-	private JTextField txtAmount;
 	
 	private Access ax = new Access();
+	
+	public User recipient;
+	private JTable transactionTbl;
 
 	/**
 	 * Launch the application.
@@ -52,7 +56,7 @@ public class WithdrawUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WithdrawUI frame = new WithdrawUI();
+					TransactionsUI frame = new TransactionsUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,7 +68,7 @@ public class WithdrawUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public WithdrawUI() {
+	public TransactionsUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 717, 532);
 		contentPane = new JPanel();
@@ -79,7 +83,7 @@ public class WithdrawUI extends JFrame {
 		contentPane.add(logo);
 		
 		txtWithdrawFunds = new JTextField();
-		txtWithdrawFunds.setText("     Withdraw Funds");
+		txtWithdrawFunds.setText("     Transaction log:");
 		txtWithdrawFunds.setForeground(Color.WHITE);
 		txtWithdrawFunds.setFont(new Font("Dubai Medium", Font.BOLD, 22));
 		txtWithdrawFunds.setEditable(false);
@@ -87,18 +91,6 @@ public class WithdrawUI extends JFrame {
 		txtWithdrawFunds.setBackground(new Color(0, 85, 43));
 		txtWithdrawFunds.setBounds(0, 61, 736, 50);
 		contentPane.add(txtWithdrawFunds);
-		
-		JLabel l1 = new JLabel("ENTER AMOUNT YOU WANT");
-		l1.setForeground(Color.WHITE);
-		l1.setFont(new Font("Dubai Medium", Font.BOLD, 35));
-		l1.setBounds(127, 121, 465, 60);
-		contentPane.add(l1);
-		
-		JLabel lblToWithdraw = new JLabel("TO WITHDRAW");
-		lblToWithdraw.setForeground(Color.WHITE);
-		lblToWithdraw.setFont(new Font("Dubai Medium", Font.BOLD, 35));
-		lblToWithdraw.setBounds(243, 179, 259, 60);
-		contentPane.add(lblToWithdraw);
 		
 		JLabel lblUserID = new JLabel("Acc Nr: 0");
 		lblUserID.setHorizontalAlignment(SwingConstants.LEFT);
@@ -121,20 +113,6 @@ public class WithdrawUI extends JFrame {
 		lblBalance.setBounds(537, 25, 189, 25);
 		contentPane.add(lblBalance);
 		
-		JButton btnWithdraw = new JButton("WITHDRAW");
-		btnWithdraw.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				withdraw();
-				DecimalFormat df = new DecimalFormat("#0.###");
-				lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
-			}
-		});
-		btnWithdraw.setForeground(Color.WHITE);
-		btnWithdraw.setFont(new Font("Dubai Medium", Font.BOLD, 16));
-		btnWithdraw.setBackground(new Color(0, 128, 64));
-		btnWithdraw.setBounds(227, 310, 125, 50);
-		contentPane.add(btnWithdraw);
-		
 		JButton btnBack = new JButton("BACK");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -144,7 +122,7 @@ public class WithdrawUI extends JFrame {
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setFont(new Font("Dubai Medium", Font.BOLD, 18));
 		btnBack.setBackground(new Color(0, 128, 64));
-		btnBack.setBounds(402, 310, 125, 50);
+		btnBack.setBounds(310, 370, 125, 50);
 		contentPane.add(btnBack);
 		
 		JButton btnHelp = new JButton("Help");
@@ -180,57 +158,54 @@ public class WithdrawUI extends JFrame {
 		DecimalFormat df = new DecimalFormat("#0.###");
 		lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
 		
-		txtAmount = new JTextField();
-		txtAmount.setHorizontalAlignment(SwingConstants.CENTER);
-		txtAmount.setFont(new Font("Dialog", Font.BOLD, 22));
-		txtAmount.setColumns(10);
-		txtAmount.setBounds(226, 261, 300, 33);
-		contentPane.add(txtAmount);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(72, 124, 606, 233);
+		contentPane.add(scrollPane);
 		
-		JLabel lblNewLabel = new JLabel("$");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 22));
-		lblNewLabel.setBounds(202, 264, 27, 27);
-		contentPane.add(lblNewLabel);
+		transactionTbl = new JTable();
+		scrollPane.setViewportView(transactionTbl);
+		transactionTbl.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Transaction Type", "Amount", "Recipient", "Date"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, String.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollPane.setRowHeaderView(scrollBar);
+		transactionTbl.getColumnModel().getColumn(0).setPreferredWidth(150);
+		transactionTbl.getColumnModel().getColumn(1).setPreferredWidth(150);
+		transactionTbl.getColumnModel().getColumn(2).setPreferredWidth(150);
+		transactionTbl.getColumnModel().getColumn(3).setPreferredWidth(150);
+		
+		DefaultTableModel model = (DefaultTableModel) transactionTbl.getModel();
+		//model.addRow(new Object[] {"Test", "Test", "ada", "hfes"});
+
+		setLog(model);
+		
 	}
 
-	protected void withdraw() {
-		double currentBalance = SelectUserUI.currentUser.getBalance();
+	private void setLog(DefaultTableModel m) {
+		int count = ax.rows(SelectUserUI.currentUser.getUserID());
+		Transaction transaction;
+		
 		try {
-			currentBalance -= Double.parseDouble(txtAmount.getText());
-			// create new balance
-			
-			if (currentBalance < 0) {
-				JOptionPane.showMessageDialog(null, "Cannot withdraw as balance would fall below 0.");
-				return;
-				// if balance would fall below 0, return with error
-			}		
-			SelectUserUI.currentUser.setBalance(currentBalance);
-			// set private variable with new balance
-			
-			boolean ok = ax.updateBalance(SelectUserUI.currentUser, currentBalance);
-			// update balance in DB
-			
-			if (ok == true) {
-				JOptionPane.showMessageDialog(null, "Amount successfully withdrawn.");
-				
-				boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Withdraw", Double.parseDouble(txtAmount.getText()), "");
-				
-				if (log == true) {
-					System.out.println("Saved in log");
-				}
-				else {
-					System.out.println("Couldn't save in log");
-				}
-				
-				return;
+			transaction = new Transaction();
+			for (int i = 0; i < count; i++) {
+				transaction = ax.getTransaction(SelectUserUI.currentUser.getUserID(), i);
+				m.addRow(new Object[] {transaction.getType(), transaction.getAmount(), transaction.getRecipient(), transaction.getDate()});
 			}
-			else {
-				JOptionPane.showMessageDialog(this, "Could not withdraw amount.");
-			}
-		}		
+		}
 		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Please enter only numbers");			
+			JOptionPane.showMessageDialog(null, "Error selecting transactions.");			
 		}
 		
 	}

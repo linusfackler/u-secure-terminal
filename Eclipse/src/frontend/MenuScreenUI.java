@@ -168,7 +168,9 @@ public class MenuScreenUI extends JFrame {
 	}
 
 	protected void openTransactions() {
-		// to be added soon
+		this.setVisible(false);
+		new TransactionsUI().setVisible(true);
+		// switch to Transaction UI
 	}
 
 	protected void openTransfer() {

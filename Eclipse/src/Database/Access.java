@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import backend.Transaction;
 import backend.User;
 
 public class Access
@@ -60,6 +61,70 @@ public class Access
 		return ok;
 	}
 	
+	public boolean logTransaction(int uID, String type, double amount, String recipient) {
+		try {
+			long millis=System.currentTimeMillis();
+			java.sql.Date date = new java.sql.Date(millis);
+			
+			mSQL = "INSERT INTO transactions VALUES (NULL, ";
+			mSQL += uID + ", '" + type + "', " + amount + ", '" + recipient + "', '" + date + "')";
+			
+			conn.openDB();				// open DB connection
+			ok = conn.changeDB(mSQL);	// send command to DB
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			ok = false;
+			// if error, return false
+		}
+		conn.closeDB();		// close database connection
+		return ok;
+	}
+	
+	public int rows(int uID) {
+		ResultSet rsM;
+		int result = 0;
+		mSQL = "SELECT COUNT(*) FROM transactions WHERE UserID = " + uID;
+		
+		conn.openDB();				// open DB connection
+		rsM = conn.readDB(mSQL);	// read DB and return results
+
+		try {
+			rsM.next();
+			result = rsM.getInt("count(*)");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
+		return result;
+	}
+	
+	public Transaction getTransaction(int uID, int i) {
+		ResultSet rsM;
+		Transaction t = new Transaction();
+		
+		mSQL = "SELECT * FROM transactions WHERE UserID = " + uID + " LIMIT " + i + ", 1;";
+		conn.openDB();				// open DB connection
+		rsM = conn.readDB(mSQL);	// read DB and return results
+		
+		try {
+			rsM.next();
+			t.setType(rsM.getString("Type"));
+			t.setAmount(rsM.getDouble("Amount"));
+			t.setRecipient(rsM.getString("Recipient"));
+			t.setDate(rsM.getString("Date"));
+			// set transaction data to what was returned from DB
+		}
+		catch(SQLException err) {
+			System.out.println("Problem creating Transaction object");
+			//System.out.println("User not found");
+			t = null;
+			// if error, user not found
+		}
+		conn.closeDB();			// close DB connection
+		return t;				// return found Transaction
+	}
+	
 	public User searchUser(int uID) {
 		ResultSet rsM;
 		currentUser = new User();
@@ -77,7 +142,7 @@ public class Access
 			// set users data to what was returned from DB
 		}
 		catch(SQLException err) {
-			System.out.println("kljaoifjenoijfo");
+			System.out.println("Problem creating User object");
 			//System.out.println("User not found");
 			currentUser = null;
 			// if error, user not found

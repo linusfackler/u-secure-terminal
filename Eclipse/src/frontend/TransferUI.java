@@ -1,8 +1,8 @@
-// This is the Withdraw UI screen, in which the user can
-// withdraw money from his account, by inputting a double variable
-// It will automatically update his DB entry.
-// If there are errors, the user will see a pop-up message.
-// This includes also if the balance drops below 0.
+// This is the Transfer UI screen, in which the user can
+// transfer money from his account to a recipient's account.
+// First, he enters the UserID and checks if the user exists.
+// Then, he enters the amount to transfer. The amount will be deducted from his account,
+// and added to the recipients account.
 
 
 
@@ -82,7 +82,7 @@ public class TransferUI extends JFrame {
 		contentPane.add(logo);
 		
 		txtWithdrawFunds = new JTextField();
-		txtWithdrawFunds.setText("     Withdraw Funds");
+		txtWithdrawFunds.setText("     Transfer Funds");
 		txtWithdrawFunds.setForeground(Color.WHITE);
 		txtWithdrawFunds.setFont(new Font("Dubai Medium", Font.BOLD, 22));
 		txtWithdrawFunds.setEditable(false);
@@ -232,12 +232,18 @@ public class TransferUI extends JFrame {
 		int userid = Integer.parseInt(txtRecipient.getText());
 		
 		try {
+			if (userid == SelectUserUI.currentUser.getUserID()) {
+				JOptionPane.showMessageDialog(null, "Recipient cannot be yourself.");
+				return;
+			}
+			
 			recipient = ax.searchUser(userid);
 			
 			if (recipient == null) {
 				JOptionPane.showMessageDialog(null, "Cannot find recipient.");
 				return;
 			}
+
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error selecting recipient.");			
@@ -268,6 +274,16 @@ public class TransferUI extends JFrame {
 				
 				if (ok == true && okR == true) {
 					JOptionPane.showMessageDialog(null, "Amount successfully transferred.");
+					
+					boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Transfer", Double.parseDouble(txtAmount.getText()), recipient.getName());
+					
+					if (log == true) {
+						System.out.println("Saved in log");
+					}
+					else {
+						System.out.println("Couldn't save in log");
+					}
+					
 					return;
 				}
 				else {
