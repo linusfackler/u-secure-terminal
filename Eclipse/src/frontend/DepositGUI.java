@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
@@ -103,7 +104,8 @@ public class DepositGUI extends JFrame {
         btnDeposit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		deposit();
-        		lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
+        		DecimalFormat df = new DecimalFormat("#0.###");
+        		lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
         	}
         });
         btnDeposit.setFont(new Font("Dubai Medium", Font.BOLD, 18));
@@ -121,9 +123,7 @@ public class DepositGUI extends JFrame {
         btnBack.setBackground(new Color(0, 128, 64));
         btnBack.setFont(new Font("Dubai Medium", Font.BOLD, 18));
         btnBack.setForeground(new Color(255, 255, 255));
-        //
-        
-        
+
         // POSITIONING
         getContentPane().setLayout(null);
         
@@ -205,7 +205,8 @@ public class DepositGUI extends JFrame {
 		
 		lblUserID.setText("Acc Nr: " + Integer.toString(SelectUserUI.currentUser.getUserID()));
 		lblName.setText(SelectUserUI.currentUser.getName());
-		lblBalance.setText("$ " + Double.toString(SelectUserUI.currentUser.getBalance()));
+		DecimalFormat df = new DecimalFormat("#0.###");
+		lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
 	}
 
 	protected void deposit() {

@@ -26,6 +26,7 @@ import backend.User;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.awt.event.ActionEvent;
 
 public class MenuScreenUI extends JFrame {
@@ -151,7 +152,7 @@ public class MenuScreenUI extends JFrame {
 		lblBalance.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblBalance.setForeground(Color.WHITE);
 		lblBalance.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblBalance.setBounds(525, 73, 189, 25);
+		lblBalance.setBounds(453, 73, 261, 25);
 		contentPane.add(lblBalance);
 		
         setSize(750,535);
@@ -162,7 +163,8 @@ public class MenuScreenUI extends JFrame {
 		curr = SelectUserUI.currentUser;
 		lblUserID.setText("Acc Nr: " + Integer.toString(curr.getUserID()));
 		lblName.setText(curr.getName());
-		lblBalance.setText("$ " + Double.toString(curr.getBalance()));
+		DecimalFormat df = new DecimalFormat("#0.###");
+		lblBalance.setText("$ " + df.format(curr.getBalance()));
 	}
 
 	protected void openTransactions() {
@@ -170,7 +172,9 @@ public class MenuScreenUI extends JFrame {
 	}
 
 	protected void openTransfer() {
-		// to be added soon
+		this.setVisible(false);
+		new TransferUI().setVisible(true);
+		// switch to Transfer UI
 	}
 
 	protected void openWithdraw() {

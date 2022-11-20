@@ -60,24 +60,25 @@ public class Access
 		return ok;
 	}
 	
-	public User searchUser(int uID) {   
-		ResultSet rsM;                                                  
+	public User searchUser(int uID) {
+		ResultSet rsM;
 		currentUser = new User();
-		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";       
+		mSQL = "SELECT * FROM user WHERE UserID = '"+ uID +"';";
 		// create MySQL command to insert user into DB
 		conn.openDB();				// open DB connection
 		rsM = conn.readDB(mSQL);	// read DB and return results
-			
+
 		try {
 			rsM.next();
 			currentUser.setUserID(rsM.getInt("UserID"));
 			currentUser.setName(rsM.getString("UserName"));
 			currentUser.setBalance(rsM.getDouble("UserBalance"));
-			currentUser.setFingerPrint(rsM.getNString("UserFingerprint"));
+			currentUser.setFingerPrint(rsM.getString("UserFingerprint"));
 			// set users data to what was returned from DB
 		}
 		catch(SQLException err) {
-			System.out.println("User not found");
+			System.out.println("kljaoifjenoijfo");
+			//System.out.println("User not found");
 			currentUser = null;
 			// if error, user not found
 		}	

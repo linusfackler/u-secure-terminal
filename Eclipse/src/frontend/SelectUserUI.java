@@ -197,12 +197,12 @@ public class SelectUserUI extends JFrame {
 		
 		try {
 			currentUser = ax.searchUser(userid);
-			
+
 			if (currentUser == null) {
 				JOptionPane.showMessageDialog(null, "Cannot find user.");
 				return;
 			}
-				
+
 			this.setVisible(false);
 			new MenuScreenUI().setVisible(true);
 		}

@@ -31,7 +31,8 @@ public class Connector
 
 		try
 		{
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/terminal","root","");  
+			//conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/terminal","root","");
+			conn = DriverManager.getConnection("jdbc:mysql://u-secure-terminal.mysql.database.azure.com/terminal","linusfackler","Terminal12345!");
 			stmtSQL = conn.createStatement();  
 			System.out.println("Connected successfully");
 			// create DB connection using the Driver we previously loaded
@@ -67,7 +68,7 @@ public class Connector
 		{
 			rs = stmtSQL.executeQuery(pSQL);
 			System.out.println("Read DB");
-			return rs;                 
+			return rs;
 		}
 		catch(SQLException err)
 		{
