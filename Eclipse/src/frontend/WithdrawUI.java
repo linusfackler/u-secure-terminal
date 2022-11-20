@@ -214,7 +214,7 @@ public class WithdrawUI extends JFrame {
 			if (ok == true) {
 				JOptionPane.showMessageDialog(null, "Amount successfully withdrawn.");
 				
-				boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Withdraw", Double.parseDouble(txtAmount.getText()), "");
+				boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Withdraw", Double.parseDouble(txtAmount.getText()), " -");
 				
 				if (log == true) {
 					System.out.println("Saved in log");

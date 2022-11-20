@@ -18,11 +18,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.Base64;
 import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
@@ -34,6 +39,7 @@ import backend.User;
 import database.Access;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 public class SelectUserUI extends JFrame {
 	
@@ -42,10 +48,10 @@ public class SelectUserUI extends JFrame {
 	private JTextField txtUserID;
 	private JTextField textField_1;
 	private JTextField txtName;
-	private JTextField txtBalance;
 	
 	private Access ax = new Access();
 	public static User currentUser;
+	public static String encodedImage;
 
 	/**
 	 * Launch the application.
@@ -110,7 +116,7 @@ public class SelectUserUI extends JFrame {
 		btnSelect.setForeground(Color.WHITE);
 		btnSelect.setFont(new Font("Dubai Medium", Font.BOLD, 17));
 		btnSelect.setBackground(new Color(0, 128, 64));
-		btnSelect.setBounds(24, 294, 125, 50);
+		btnSelect.setBounds(23, 305, 145, 50);
 		contentPane.add(btnSelect);
 		
 		JButton btnCreate = new JButton("CREATE");
@@ -122,7 +128,7 @@ public class SelectUserUI extends JFrame {
 		btnCreate.setForeground(Color.WHITE);
 		btnCreate.setFont(new Font("Dubai Medium", Font.BOLD, 18));
 		btnCreate.setBackground(new Color(0, 128, 64));
-		btnCreate.setBounds(456, 359, 125, 50);
+		btnCreate.setBounds(458, 305, 125, 50);
 		contentPane.add(btnCreate);
 		
 		JButton btnHelp = new JButton("Help");
@@ -174,32 +180,62 @@ public class SelectUserUI extends JFrame {
 		txtName.setFont(new Font("Dialog", Font.BOLD, 18));
 		txtName.setBounds(457, 225, 144, 38);
 		contentPane.add(txtName);
-		
-		JLabel lblBalance = new JLabel("BALANCE:");
-		lblBalance.setForeground(Color.WHITE);
-		lblBalance.setFont(new Font("Dubai Medium", Font.BOLD, 16));
-		lblBalance.setBounds(458, 283, 88, 32);
-		contentPane.add(lblBalance);
-		
-		txtBalance = new JTextField();
-		txtBalance.setFont(new Font("Dialog", Font.BOLD, 18));
-		txtBalance.setBounds(457, 311, 144, 38);
-		contentPane.add(txtBalance);
 
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
 	}
 
+	protected void scanFinger() {
+		
+		JFileChooser file_upload = new JFileChooser();	
+		int res = file_upload.showSaveDialog(null);
+		
+		if (res == JFileChooser.APPROVE_OPTION) {
+			File file_path = new File(file_upload.getSelectedFile().getAbsolutePath());
+			System.out.println(file_path);
+			
+			try {
+				BufferedImage image = ImageIO.read(file_path);
+				
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				ImageIO.write(image, "png", outputStream);
+				
+				encodedImage = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error scanning finger.");
+			}
+			
+		}
+		
+		
+	}
+
 	protected void select() {
 		int userid = Integer.parseInt(txtUserID.getText());
 		currentUser = new User();
+		
+		scanFinger();
 		
 		try {
 			currentUser = ax.searchUser(userid);
 
 			if (currentUser == null) {
 				JOptionPane.showMessageDialog(null, "Cannot find user.");
+				return;
+			}
+			
+			if (!currentUser.getFingerPrint().equals(encodedImage)) {
+				JOptionPane.showMessageDialog(null, "Fingerprints don't match.");
+				
+				System.out.print("Current:  " + currentUser.getFingerPrint());
+				System.out.println("");
+				System.out.println("");
+				System.out.print("Entered:  " + encodedImage);
+				
+				
+				currentUser = null;
 				return;
 			}
 
@@ -215,14 +251,15 @@ public class SelectUserUI extends JFrame {
 	// this method closes the current window and opens the menu screen
 	protected void create() {
 		currentUser = new User();
+		scanFinger();
 		
 		try {
 			int randomNum = ThreadLocalRandom.current().nextInt(300000, 400000);
 			// create UserID with random int from 300000 to 400000
 			currentUser.setUserID(randomNum);
 			currentUser.setName(txtName.getText());
-			currentUser.setBalance(Double.parseDouble(txtBalance.getText()));
-			currentUser.setFingerPrint("10111010");
+			currentUser.setBalance(0);
+			currentUser.setFingerPrint(encodedImage);
 			// set user's private variables
 			
 			boolean ok = ax.createUser(currentUser);

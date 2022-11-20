@@ -224,7 +224,7 @@ public class DepositGUI extends JFrame {
 			if (ok == true) {
 				JOptionPane.showMessageDialog(null, "Amount successfully desposited.");
 				
-				boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Deposit", Double.parseDouble(txtAmount.getText()), "");
+				boolean log = ax.logTransaction(SelectUserUI.currentUser.getUserID(), "Deposit", Double.parseDouble(txtAmount.getText()), " -");
 				
 				if (log == true) {
 					System.out.println("Saved in log");

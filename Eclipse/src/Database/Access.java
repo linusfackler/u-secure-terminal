@@ -26,9 +26,11 @@ public class Access
 			mSQL = "INSERT INTO user(UserID, UserName, UserBalance, UserFingerprint) ";
 			mSQL += "VALUES (" + u.getUserID() + ", '";
 			mSQL += u.getName()+ "',";
-			mSQL += u.getBalance() + ",";
-			mSQL += u.getFingerPrint() + ");";
+			mSQL += u.getBalance() + ",'";
+			mSQL += u.getFingerPrint() + "');";
 			// create MySQL command to insert user into DB
+			
+			System.out.println(mSQL);
 
 			conn.openDB();				// open DB connection
 			ok = conn.changeDB(mSQL);	// send command to DB
