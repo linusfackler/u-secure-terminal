@@ -37,6 +37,8 @@ import javax.swing.border.LineBorder;
 
 import backend.User;
 import database.Access;
+//import videocaller.Server;
+//import videocaller.ServerUI;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -87,7 +89,7 @@ public class SelectUserUI extends JFrame {
 		contentPane.add(logo);
 		
 		txtCreate = new JTextField();
-		txtCreate.setText("     Select or Create User");
+		txtCreate.setText("     Login or create account");
 		txtCreate.setForeground(Color.WHITE);
 		txtCreate.setFont(new Font("Dubai Medium", Font.BOLD, 22));
 		txtCreate.setEditable(false);
@@ -96,7 +98,7 @@ public class SelectUserUI extends JFrame {
 		txtCreate.setBounds(0, 61, 736, 50);
 		contentPane.add(txtCreate);
 		
-		JLabel l1 = new JLabel("SELECT USER");
+		JLabel l1 = new JLabel("LOGIN");
 		l1.setForeground(Color.WHITE);
 		l1.setFont(new Font("Dubai Medium", Font.BOLD, 35));
 		l1.setBounds(24, 121, 248, 60);
@@ -107,7 +109,7 @@ public class SelectUserUI extends JFrame {
 		txtUserID.setBounds(24, 225, 144, 38);
 		contentPane.add(txtUserID);
 		
-		JButton btnSelect = new JButton("SELECT");
+		JButton btnSelect = new JButton("LOGIN");
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				select();
@@ -134,6 +136,7 @@ public class SelectUserUI extends JFrame {
 		JButton btnHelp = new JButton("Help");
 		btnHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				help();
 			}
 		});
 		btnHelp.setForeground(Color.WHITE);
@@ -154,20 +157,20 @@ public class SelectUserUI extends JFrame {
         // LOGO
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
-		JLabel lblCreateUser = new JLabel("CREATE USER");
+		JLabel lblCreateUser = new JLabel("CREATE ACCOUNT");
 		lblCreateUser.setForeground(Color.WHITE);
-		lblCreateUser.setFont(new Font("Dubai Medium", Font.BOLD, 35));
-		lblCreateUser.setBounds(448, 121, 248, 60);
+		lblCreateUser.setFont(new Font("Dubai Medium", Font.BOLD, 30));
+		lblCreateUser.setBounds(448, 121, 288, 60);
 		contentPane.add(lblCreateUser);
 		
-		JLabel lblUserid = new JLabel("USERID:");
+		JLabel lblUserid = new JLabel("ACCOUNT NUMBER");
 		lblUserid.setForeground(Color.WHITE);
-		lblUserid.setFont(new Font("Dubai Medium", Font.BOLD, 16));
-		lblUserid.setBounds(24, 194, 88, 32);
+		lblUserid.setFont(new Font("Dubai Medium", Font.BOLD, 14));
+		lblUserid.setBounds(24, 194, 172, 32);
 		contentPane.add(lblUserid);
 		
 		JLabel lblName = new JLabel("NAME:");
@@ -180,13 +183,32 @@ public class SelectUserUI extends JFrame {
 		txtName.setFont(new Font("Dialog", Font.BOLD, 18));
 		txtName.setBounds(457, 225, 144, 38);
 		contentPane.add(txtName);
+		
+		JLabel fingerPrintPic = new JLabel("");
+		fingerPrintPic.setHorizontalAlignment(SwingConstants.CENTER);
+		fingerPrintPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("fingerprint.png")).getImage().getScaledInstance(63, 73, Image.SCALE_DEFAULT)));
+		fingerPrintPic.setBounds(298, 210, 63, 73);
+		contentPane.add(fingerPrintPic);
+		
+		JLabel fingerPrintPic_1 = new JLabel("");
+		fingerPrintPic_1.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("arrow.png")).getImage().getScaledInstance(104, 112, Image.SCALE_DEFAULT)));
+		fingerPrintPic_1.setHorizontalAlignment(SwingConstants.CENTER);
+		fingerPrintPic_1.setBounds(279, 296, 104, 112);
+		contentPane.add(fingerPrintPic_1);
 
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);
 	}
 
+	protected void help() {
+		//ServerUI fr = new ServerUI();
+		//fr.setVisible(true);
+	}
+
 	protected void scanFinger() {
+		
+		JOptionPane.showMessageDialog(null, "Please scan finger (Select fingerprint image).");
 		
 		JFileChooser file_upload = new JFileChooser();	
 		int res = file_upload.showSaveDialog(null);
@@ -206,19 +228,18 @@ public class SelectUserUI extends JFrame {
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Error scanning finger.");
 			}
-			
 		}
-		
-		
 	}
 
 	protected void select() {
-		int userid = Integer.parseInt(txtUserID.getText());
-		currentUser = new User();
-		
-		scanFinger();
+		if (txtUserID.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please enter AccountID.");
+			return;
+		}
 		
 		try {
+			int userid = Integer.parseInt(txtUserID.getText());
+			currentUser = new User();
 			currentUser = ax.searchUser(userid);
 
 			if (currentUser == null) {
@@ -226,15 +247,10 @@ public class SelectUserUI extends JFrame {
 				return;
 			}
 			
+			scanFinger();
+			
 			if (!currentUser.getFingerPrint().equals(encodedImage)) {
-				JOptionPane.showMessageDialog(null, "Fingerprints don't match.");
-				
-				System.out.print("Current:  " + currentUser.getFingerPrint());
-				System.out.println("");
-				System.out.println("");
-				System.out.print("Entered:  " + encodedImage);
-				
-				
+				JOptionPane.showMessageDialog(null, "Fingerprints don't match.");				
 				currentUser = null;
 				return;
 			}
@@ -250,6 +266,12 @@ public class SelectUserUI extends JFrame {
 
 	// this method closes the current window and opens the menu screen
 	protected void create() {
+		
+		if (txtName.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Please enter Name.");
+			return;
+		}
+		
 		currentUser = new User();
 		scanFinger();
 		
@@ -266,7 +288,7 @@ public class SelectUserUI extends JFrame {
 			// create user in DB
 			
 			if (ok == true) {
-				JOptionPane.showMessageDialog(this, "User created");
+				JOptionPane.showMessageDialog(this, "User created with Account number: " + currentUser.getUserID());
 				this.setVisible(false);
 				new MenuScreenUI().setVisible(true);
 				// if DB created user, switch to MenuScreenUI

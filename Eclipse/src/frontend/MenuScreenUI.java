@@ -15,9 +15,11 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -25,14 +27,23 @@ import javax.swing.border.EmptyBorder;
 import backend.User;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.DecimalFormat;
+import java.util.Base64;
 import java.awt.event.ActionEvent;
+
+import database.Access;
 
 public class MenuScreenUI extends JFrame {
 
 	private JPanel contentPane;
-
+	private Access ax = new Access();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -65,7 +76,7 @@ public class MenuScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
@@ -78,9 +89,16 @@ public class MenuScreenUI extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(55, 71, 79));
-		panel.setBounds(30, 204, 684, 284);
+		panel.setBounds(30, 177, 684, 308);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		
+		JButton btnWithdraw = new JButton("WITHDRAWAL");
+		btnWithdraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openWithdraw();		// when button pressed, Withdraw screen opened
+			}
+		});
 		
 		JButton btnDeposit = new JButton("DEPOSIT");
 		btnDeposit.addActionListener(new ActionListener() {
@@ -92,20 +110,13 @@ public class MenuScreenUI extends JFrame {
 		btnDeposit.setBackground(Color.WHITE);
 		btnDeposit.setOpaque(true);
 		btnDeposit.setForeground(Color.BLACK);
-		btnDeposit.setBounds(29, 28, 269, 110);
+		btnDeposit.setBounds(29, 28, 269, 79);
 		panel.add(btnDeposit);
-		
-		JButton btnWithdraw = new JButton("WITHDRAWAL");
-		btnWithdraw.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				openWithdraw();		// when button pressed, Withdraw screen opened
-			}
-		});
 		btnWithdraw.setBackground(Color.WHITE);
 		btnWithdraw.setOpaque(true);
 		btnWithdraw.setForeground(Color.BLACK);
 		btnWithdraw.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
-		btnWithdraw.setBounds(385, 27, 272, 113);
+		btnWithdraw.setBounds(385, 27, 272, 79);
 		panel.add(btnWithdraw);
 		
 		JButton btnTransfer = new JButton("TRANSFER");
@@ -118,7 +129,7 @@ public class MenuScreenUI extends JFrame {
 		btnTransfer.setOpaque(true);
 		btnTransfer.setForeground(Color.BLACK);
 		btnTransfer.setFont(new Font("Dubai Medium", Font.PLAIN, 33));
-		btnTransfer.setBounds(29, 164, 269, 110);
+		btnTransfer.setBounds(29, 131, 269, 79);
 		panel.add(btnTransfer);
 		
 		JButton btnRecent = new JButton("TRANSACTIONS");
@@ -131,8 +142,34 @@ public class MenuScreenUI extends JFrame {
 		btnRecent.setOpaque(true);
 		btnRecent.setForeground(Color.BLACK);
 		btnRecent.setFont(new Font("Dubai Medium", Font.PLAIN, 30));
-		btnRecent.setBounds(385, 164, 272, 110);
+		btnRecent.setBounds(385, 131, 272, 79);
 		panel.add(btnRecent);
+		
+		JButton btnResetFingerprint = new JButton("RESET FINGERPRINT");
+		btnResetFingerprint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetFingerprint();
+			}
+		});
+		btnResetFingerprint.setOpaque(true);
+		btnResetFingerprint.setForeground(Color.BLACK);
+		btnResetFingerprint.setFont(new Font("Dubai Medium", Font.PLAIN, 25));
+		btnResetFingerprint.setBackground(Color.WHITE);
+		btnResetFingerprint.setBounds(202, 236, 269, 72);
+		panel.add(btnResetFingerprint);
+		
+		JButton btnLogout = new JButton("LOGOUT");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				logout();
+			}
+		});
+		btnLogout.setOpaque(true);
+		btnLogout.setForeground(Color.BLACK);
+		btnLogout.setFont(new Font("Dubai Medium", Font.PLAIN, 16));
+		btnLogout.setBackground(Color.WHITE);
+		btnLogout.setBounds(575, 268, 109, 40);
+		panel.add(btnLogout);
 		
 		JLabel lblName = new JLabel("Firstname Lastname");
 		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -165,6 +202,47 @@ public class MenuScreenUI extends JFrame {
 		lblName.setText(curr.getName());
 		DecimalFormat df = new DecimalFormat("#0.###");
 		lblBalance.setText("$ " + df.format(curr.getBalance()));
+	}
+
+	protected void logout() {
+		this.setVisible(false);
+		new MainScreenUI().setVisible(true);
+		SelectUserUI.currentUser = null;
+	}
+
+	protected void resetFingerprint() {
+		JOptionPane.showMessageDialog(null, "Please scan finger (Select fingerprint image).");
+		
+		JFileChooser file_upload = new JFileChooser();	
+		int res = file_upload.showSaveDialog(null);
+		
+		if (res == JFileChooser.APPROVE_OPTION) {
+			File file_path = new File(file_upload.getSelectedFile().getAbsolutePath());
+			System.out.println(file_path);
+			
+			try {
+				BufferedImage image = ImageIO.read(file_path);
+				
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				ImageIO.write(image, "png", outputStream);
+				
+				String encodedImage = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+				
+				boolean ok = ax.updateFingerprint(SelectUserUI.currentUser, encodedImage);
+				
+				if (ok == true) {
+					JOptionPane.showMessageDialog(null, "Fingerprint successfully updated.");
+					return;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Error updating fingerprint.");
+				}
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error scanning finger.");
+			}
+		}
+		
 	}
 
 	protected void openTransactions() {

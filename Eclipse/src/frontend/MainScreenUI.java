@@ -78,11 +78,12 @@ public class MainScreenUI extends JFrame {
 		
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		//logoPic.setIcon(new ImageIcon(new ImageIcon("res/banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
-		JLabel scanText = new JLabel("PLEASE SCAN FINGERPRINT");
+		JLabel scanText = new JLabel("WELCOME BACK!");
 		scanText.setForeground(new Color(255, 255, 255));
 		scanText.setHorizontalAlignment(SwingConstants.CENTER);
 		scanText.setFont(new Font("Dubai Medium", Font.PLAIN, 50));
@@ -143,19 +144,7 @@ public class MainScreenUI extends JFrame {
 		btnMandarin.setOpaque(true);
 		btnMandarin.setBounds(257, 267, 192, 67);
 		panel.add(btnMandarin);
-		
-		JLabel fingerPrintPic = new JLabel("");
-		fingerPrintPic.setHorizontalAlignment(SwingConstants.CENTER);
-		fingerPrintPic.setIcon(new ImageIcon(new ImageIcon("fingerprint.png").getImage().getScaledInstance(63, 73, Image.SCALE_DEFAULT)));
-		fingerPrintPic.setBounds(652, 293, 63, 73);
-		contentPane.add(fingerPrintPic);
-		
-		JLabel fingerPrintPic_1 = new JLabel("");
-		fingerPrintPic_1.setIcon(new ImageIcon(new ImageIcon("arrow.png").getImage().getScaledInstance(104, 112, Image.SCALE_DEFAULT)));
-		fingerPrintPic_1.setHorizontalAlignment(SwingConstants.CENTER);
-		fingerPrintPic_1.setBounds(632, 376, 104, 112);
-		contentPane.add(fingerPrintPic_1);
-		
+			
         setSize(750,535);
         setLocation(400,100);
         setVisible(true);

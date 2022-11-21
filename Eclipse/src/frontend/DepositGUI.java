@@ -106,6 +106,7 @@ public class DepositGUI extends JFrame {
         		deposit();
         		DecimalFormat df = new DecimalFormat("#0.###");
         		lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
+        		txtAmount.setText("");
         	}
         });
         btnDeposit.setFont(new Font("Dubai Medium", Font.BOLD, 18));
@@ -150,7 +151,7 @@ public class DepositGUI extends JFrame {
         // LOGO        
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		getContentPane().add(logoPic);
         

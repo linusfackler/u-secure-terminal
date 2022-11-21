@@ -124,6 +124,7 @@ public class TransferUI extends JFrame {
 				transfer();
 				DecimalFormat df = new DecimalFormat("#0.###");
 				lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
+				txtAmount.setText("");
 			}
 		});
 		btnTransfer.setForeground(Color.WHITE);
@@ -163,7 +164,7 @@ public class TransferUI extends JFrame {
         // LOGO
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		
@@ -228,10 +229,10 @@ public class TransferUI extends JFrame {
 	}
 
 	protected void findUser() {
-		recipient = new User();
-		int userid = Integer.parseInt(txtRecipient.getText());
-		
 		try {
+			recipient = new User();
+			int userid = Integer.parseInt(txtRecipient.getText());
+			
 			if (userid == SelectUserUI.currentUser.getUserID()) {
 				JOptionPane.showMessageDialog(null, "Recipient cannot be yourself.");
 				return;

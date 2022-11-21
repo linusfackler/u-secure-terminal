@@ -127,6 +127,7 @@ public class WithdrawUI extends JFrame {
 				withdraw();
 				DecimalFormat df = new DecimalFormat("#0.###");
 				lblBalance.setText("$ " + df.format(SelectUserUI.currentUser.getBalance()));
+				txtAmount.setText("");
 			}
 		});
 		btnWithdraw.setForeground(Color.WHITE);
@@ -166,7 +167,7 @@ public class WithdrawUI extends JFrame {
         // LOGO
 		JLabel logoPic = new JLabel("");
 		logoPic.setHorizontalAlignment(SwingConstants.CENTER);
-		logoPic.setIcon(new ImageIcon(new ImageIcon("banklogo.png").getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
+		logoPic.setIcon(new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("banklogo.png")).getImage().getScaledInstance(248, 58, Image.SCALE_DEFAULT)));
 		logoPic.setBounds(0, 0, 248, 58);
 		contentPane.add(logoPic);
 		

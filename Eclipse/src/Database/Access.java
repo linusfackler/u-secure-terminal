@@ -63,6 +63,25 @@ public class Access
 		return ok;
 	}
 	
+	public boolean updateFingerprint(User u, String f) {
+		try {
+			mSQL = "UPDATE user SET UserFingerprint = '";
+			mSQL += f + "' WHERE UserID = ";
+			mSQL += u.getUserID();
+			// create MySQL command to update fingerprint of the user in DB
+
+			conn.openDB();				// open DB connection
+			ok = conn.changeDB(mSQL);	// send command to DB
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			ok = false;
+			// if error, return false
+		}
+		conn.closeDB();		// close database connection
+		return ok;
+	}
+	
 	public boolean logTransaction(int uID, String type, double amount, String recipient) {
 		try {
 			long millis=System.currentTimeMillis();
